@@ -55,6 +55,9 @@ class AsyncMqttClient {
   AsyncMqttClient();
   ~AsyncMqttClient();
 
+long queueLength(); // num packets
+long queueSize();  // num bytes
+
   AsyncMqttClient& setKeepAlive(uint16_t keepAlive);
   AsyncMqttClient& setClientId(const char* clientId);
   AsyncMqttClient& setCleanSession(bool cleanSession);
@@ -84,6 +87,10 @@ class AsyncMqttClient {
   bool clearQueue();  // Not MQTT compliant!
 
   const char* getClientId() const;
+
+ public:
+  long packetsSentAndDeleted = 0;
+  long packetsSentAndKept = 0;
 
  private:
   AsyncClient _client;

@@ -73,6 +73,44 @@ AsyncMqttClient::~AsyncMqttClient() {
 #endif
 }
 
+
+
+//---------------------------------------
+//Air Giants additions 8/22
+long AsyncMqttClient::queueLength() {
+  //SEMAPHORE_TAKE();
+
+  long n = 0;
+  AsyncMqttClientInternals::OutPacket *p;
+  for( p = _head; p != nullptr; p = p->next)
+    n++;
+
+  
+
+  //SEMAPHORE_GIVE();
+
+  return n;
+}
+
+long AsyncMqttClient::queueSize() {
+  //SEMAPHORE_TAKE();
+
+  long n = 0;
+  AsyncMqttClientInternals::OutPacket *p;
+  for( p = _head; p != nullptr; p = p->next)
+    n+= p->size();
+
+  
+
+  //SEMAPHORE_GIVE();
+
+  return n;
+}
+
+//---------------------------------------
+
+
+
 AsyncMqttClient& AsyncMqttClient::setKeepAlive(uint16_t keepAlive) {
   _keepAlive = keepAlive;
   return *this;
@@ -376,7 +414,6 @@ void AsyncMqttClient::_addFront(AsyncMqttClientInternals::OutPacket* packet) {
   SEMAPHORE_GIVE();
   _handleQueue();
 }
-
 void AsyncMqttClient::_addBack(AsyncMqttClientInternals::OutPacket* packet) {
   SEMAPHORE_TAKE();
   log_i("new back #%u", packet->packetType());
@@ -427,7 +464,9 @@ void AsyncMqttClient::_handleQueue() {
         if (!_head) _tail = nullptr;
         delete tmp;
         _sent = 0;
+        packetsSentAndDeleted++;
       } else {
+        packetsSentAndKept++;
         break;  // sending is complete however send next only after mqtt confirmation
       }
     }
