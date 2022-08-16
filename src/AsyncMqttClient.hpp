@@ -91,6 +91,12 @@ long queueSize();  // num bytes
  public:
   long packetsSentAndDeleted = 0;
   long packetsSentAndKept = 0;
+  long rejectedPublishedPackets = 0;
+  long acceptedPublishedPackets = 0;
+  long numClearQueues = 0;
+  long numDisconnects = 0;
+  long numConnAckConnected = 0;
+  long numConnAccDisconnected = 0;
 
  private:
   AsyncClient _client;
