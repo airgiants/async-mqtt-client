@@ -57,6 +57,7 @@ class AsyncMqttClient {
 
 long queueLength(); // num packets
 long queueSize();  // num bytes
+void handleQueue(); 
 
   AsyncMqttClient& setKeepAlive(uint16_t keepAlive);
   AsyncMqttClient& setClientId(const char* clientId);

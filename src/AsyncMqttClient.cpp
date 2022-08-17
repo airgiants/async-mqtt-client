@@ -429,6 +429,11 @@ void AsyncMqttClient::_addBack(AsyncMqttClientInternals::OutPacket* packet) {
   _handleQueue();
 }
 
+void AsyncMqttClient::handleQueue()  // added RS 8/22 so we have a way to trigger queue sends
+{
+  _handleQueue();
+}
+
 void AsyncMqttClient::_handleQueue() {
   SEMAPHORE_TAKE();
   // On ESP32, onDisconnect is called within the close()-call. So we need to make sure we don't lock
